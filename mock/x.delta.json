@@ -1,0 +1,86 @@
+{
+  "spanishName": [
+    "Sudamérica"
+  ],
+  "summary": [
+    "something",
+    0,
+    2
+  ],
+  "surface": [
+    17840000,
+    0,
+    0
+  ],
+  "demographics": {
+    "population": [
+      385742554,
+      385744896
+    ]
+  },
+  "languages": {
+    "_t": "a",
+    "2": [
+      "inglés"
+    ],
+    "_2": [
+      "english",
+      0,
+      0
+    ]
+  },
+  "countries": {
+    "_t": "a",
+    "0": {
+      "capital": [
+        "Buenos Aires",
+        "Rawson"
+      ]
+    },
+    "_4": [
+      "",
+      10,
+      3
+    ],
+    "_8": [
+      "",
+      2,
+      3
+    ],
+    "9": [
+      {
+        "name": "Antártida",
+        "unasur": false
+      }
+    ],
+    "10": [
+      {
+        "name": "Colombia",
+        "capital": "Bogotá",
+        "independence": "1810-07-19T15:54:17.000Z",
+        "unasur": true,
+        "population": 42888594
+      }
+    ],
+    "_10": [
+      {
+        "name": "Uruguay",
+        "capital": "Montevideo",
+        "independence": "1825-08-24T15:54:17.000Z",
+        "unasur": true
+      },
+      0,
+      0
+    ],
+    "_11": [
+      {
+        "name": "Venezuela",
+        "capital": "Caracas",
+        "independence": "1811-07-04T15:54:17.000Z",
+        "unasur": true
+      },
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "title": "Person",
+  "description": "A person object",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The person's name"
+    },
+    "age": {
+      "type": "integer",
+      "description": "The person's age",
+      "minimum": 0
+    },
+    "married": {
+      "type": "boolean",
+      "description": "Marital status"
+    },
+    "spouse": {
+      "type": ["object", "null"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["name", "age"]
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#"
+      },
+      "minItems": 0
+    },
+    "favoriteNumbers": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string",
+          "pattern": "^[0-9]{5}(-[0-9]{4})?$"
+        }
+      },
+      "required": ["street", "city", "postalCode"]
+    }
+  },
+  "required": ["name", "age", "married"]
+}

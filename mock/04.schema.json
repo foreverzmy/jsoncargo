@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "Array JSON Schema",
+  "description": "A mock JSON Schema for testing direct item access",
+  "properties": {
+    "phoneNumbers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\+?[0-9]{7,15}$"
+      },
+      "minItems": 1,
+      "description": "List of phone numbers in international format."
+    },
+    "preferences": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string",
+          "enum": ["email", "sms", "phone"]
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "description": "User preferences with direct access to type-specific items."
+    }
+  },
+  "required": ["name", "age", "isEmployed", "address", "phoneNumbers", "preferences"]
+}

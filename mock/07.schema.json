@@ -1,0 +1,33 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string",
+            "pattern": "^[0-9]{5}(-[0-9]{4})?$"
+          }
+        },
+        "required": ["street", "city", "postalCode"]
+      }
+    },
+    "required": ["id", "name"]
+  },
+  "minItems": 1,
+  "description": "An array of objects with 'id' and 'name' properties"
+}

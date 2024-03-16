@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": {
+    "type": "boolean"
+  },
+  "patternProperties": {
+    "^num_": {
+      "type": "number"
+    },
+    "^str_": {
+      "type": "string"
+    },
+    "^obj_": {
+      "type": "object",
+      "patternProperties": {
+        "name": {
+          "type": "string"
+        },
+        "^num_": {
+          "type": "number"
+        },
+        "^str_": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    }
+  }
+}
