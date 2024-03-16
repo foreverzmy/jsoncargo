@@ -1,15 +1,30 @@
 {
   "name": "@piex/jsontools",
-  "module": "src/index.ts",
+  "version": "0.0.1-alpha.1",
   "type": "module",
+  "module": "src/index.ts",
+  "types": "./dist/types",
+  "esnext": "/dist/index.js",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "bun test",
+    "build:types": "tsc",
+    "build": "bun build ./src/index.ts --external lodash* --outdir ./dist --outfile=index.js--minify",
+    "prepublishOnly": "npm run build:types && npm run build"
+  },
+  "files": [
+    "./README.md",
+    "./dist",
+    "./mock",
+    "./src",
+    "./tests"
+  ],
   "devDependencies": {
     "@types/lodash": "^4.17.0",
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4",
+    "typescript": "^5"
   }
 }
