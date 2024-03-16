@@ -1,6 +1,6 @@
 {
   "name": "jsoncargo",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.9",
   "type": "module",
   "module": "src/index.ts",
   "types": "./dist/types",
@@ -13,12 +13,10 @@
     "prepublishOnly": "npm run build:types && npm run build"
   },
   "files": [
-    "./README.md",
+    "README.md",
     "LICENSE",
-    "./dist",
-    "./mock",
-    "./src",
-    "./tests"
+    "dist/",
+    "src/"
   ],
   "license": "MIT",
   "homepage": "https://github.com/foreverzmy/jsoncargo",
@@ -30,8 +28,7 @@
     "url": "https://github.com/foreverzmy/jsoncargo/issues"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.0",
-    "@types/bun": "latest"
+    "@types/lodash": "^4.17.0"
   },
   "peerDependencies": {
     "lodash": "^4",
