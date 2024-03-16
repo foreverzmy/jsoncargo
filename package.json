@@ -1,6 +1,6 @@
 {
-  "name": "@piex/jsontools",
-  "version": "0.0.1-alpha.1",
+  "name": "jsoncargo",
+  "version": "0.0.1-alpha.4",
   "type": "module",
   "module": "src/index.ts",
   "types": "./dist/types",
@@ -14,11 +14,21 @@
   },
   "files": [
     "./README.md",
+    "LICENSE",
     "./dist",
     "./mock",
     "./src",
     "./tests"
   ],
+  "license": "MIT",
+  "homepage": "https://github.com/foreverzmy/jsoncargo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/foreverzmy/jsoncargo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/foreverzmy/jsoncargo/issues"
+  },
   "devDependencies": {
     "@types/lodash": "^4.17.0",
     "@types/bun": "latest"

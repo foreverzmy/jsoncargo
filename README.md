@@ -1,4 +1,7 @@
-# jsontools
+# jsoncargo
+
+* [getSchemaByPath](#getSchemaByPath)
+* [getDeltaByPath](#getDeltaByPath)
 
 ## getSchemaByPath
 
@@ -48,7 +51,7 @@ For array schemas, the function handles both indexed and unindexed items:
 ### Example
 
 ```ts
-import { getSchemaByPath } from '@piex/jsontools';
+import { getSchemaByPath } from 'jsoncargo';
 
 const schema: JsonSchema = {
   type: 'object',
@@ -109,7 +112,7 @@ To use the `getDeltaByPath` function, you need to pass the complete delta object
 
 ```ts
 import * as jsondiffpatch from 'jsondiffpatch';
-import { getDeltaByPath } from '@piex/jsontools';
+import { getDeltaByPath } from 'jsoncargo';
 
 const country = {
   name: 'Argentina',
