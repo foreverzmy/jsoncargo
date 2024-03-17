@@ -26,3 +26,11 @@ export type Delta =
   | MovedDelta
   | TextDiffDelta
   | undefined;
+
+export enum DELTA_TYPE {
+  ADDED = 'added',
+  DELETED = 'deleted',
+  MODIFIED = 'modified',
+  UNCHANGED = 'unchanged',
+  UNKNOWN = 'unknown',
+}

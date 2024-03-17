@@ -34,8 +34,23 @@ export const getDeltaByPath = (delta: Delta, path: string | string[]): Delta => 
       // ModifiedDelta
       const left = get(delta[0], paths);
       const right = get(delta[1], paths);
-      if (typeof left !== 'undefined' || typeof right !== 'undefined') {
+      const hasLeft = typeof left !== 'undefined';
+      const hasRight = typeof right !== 'undefined';
+
+      if (isEqual(left, right)) {
+        return;
+      }
+      if (hasLeft && hasRight) {
+        // Modified
         return [left, right];
+      }
+      if (hasLeft) {
+        // Delete
+        return [left, 0, 0];
+      }
+      if (hasRight) {
+        // Add
+        return [right];
       }
       return;
     }
@@ -47,11 +62,6 @@ export const getDeltaByPath = (delta: Delta, path: string | string[]): Delta => 
       }
       return;
     }
-    if (delta.length === 3 && delta[2] === 3) {
-      // MovedDelta Not Support
-      return;
-    }
-
     if (delta.length === 3 && delta[2] === 2) {
       // TextDiffDelta
       const result = get(delta[0], paths);
@@ -60,6 +70,11 @@ export const getDeltaByPath = (delta: Delta, path: string | string[]): Delta => 
       }
       return;
     }
+    if (delta.length === 3 && delta[2] === 3) {
+      // MovedDelta Not Support
+      return;
+    }
+
     return;
   }
 
@@ -74,8 +89,10 @@ export const getDeltaByPath = (delta: Delta, path: string | string[]): Delta => 
     const addValue = getDeltaByPath(addDelta, restPath);
     const hasDelete = typeof deleteValue !== 'undefined';
     const hasAdd = typeof addValue !== 'undefined';
+    const isModifiedDelta = typeof addValue === 'object' && !Array.isArray(addValue);
+
     if (hasDelete && hasAdd) {
-      if (isEqual(deleteValue[0], addValue[0])) {
+      if (isModifiedDelta || isEqual(deleteValue[0], addValue[0])) {
         return;
       }
       return [deleteValue[0], addValue[0]];

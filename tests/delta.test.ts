@@ -1,6 +1,6 @@
 import { test, expect } from 'bun:test';
 
-import { getDeltaByPath, type Delta } from '../src';
+import { type Delta, getDeltaByPath, getDeltaType, DELTA_TYPE } from '../src';
 
 import _Delta01Add from '../mock/01.add.delta.json';
 import _Delta01Delete from '../mock/01.delete.delta.json';
@@ -35,16 +35,14 @@ test('Get Complex Delta', () => {
   expect(getDeltaByPath(DeltaX, 'demographics')).toHaveProperty('population');
   expect(getDeltaByPath(DeltaX, 'demographics.population')).toEqual([385742554, 385744896]);
   expect(getDeltaByPath(DeltaX, ['demographics', 'population', '3'])).toBeUndefined();
-
   expect(getDeltaByPath(DeltaX, ['languages'])).toMatchObject({ _t: 'a' });
   expect(getDeltaByPath(DeltaX, ['languages', '1'])).toBeUndefined();
   expect(getDeltaByPath(DeltaX, ['languages', '2'])).toMatchObject(['english', 'inglés']);
   expect(getDeltaByPath(DeltaX, ['languages', '2', '3'])).toBeUndefined();
   expect(getDeltaByPath(DeltaX, 'languages.2.0')).toMatchObject(['e', 'i']);
   expect(getDeltaByPath(DeltaX, 'languages.3')).toBeUndefined();
-
   expect(getDeltaByPath(DeltaX, ['countries'])).toMatchObject({ _t: 'a' });
-  expect(getDeltaByPath(DeltaX, 'countries.0')).toHaveProperty('capital');
+  expect(getDeltaByPath(DeltaX, 'countries.0')).toMatchObject({ capital: ['Buenos Aires', 'Rawson'] });
   expect(getDeltaByPath(DeltaX, 'countries[0].capital')).toMatchObject(['Buenos Aires', 'Rawson']);
   expect(getDeltaByPath(DeltaX, ['countries', '4'])).toMatchObject(['', 10, 3]);
   expect(getDeltaByPath(DeltaX, 'countries.8')).toMatchObject(['', 2, 3]);
@@ -59,4 +57,58 @@ test('Get Complex Delta', () => {
   expect(getDeltaByPath(DeltaX, 'countries.11')).toHaveLength(3);
   expect(getDeltaByPath(DeltaX, 'countries.11.name')).toMatchObject(['Venezuela', 0, 0]);
   expect(getDeltaByPath(DeltaX, 'countries.11.unasur')).toMatchObject([true, 0, 0]);
+});
+
+test('Get Delta Type', () => {
+  const cases = [
+    { delta: DeltaX, path: ['spanishName'], type: DELTA_TYPE.ADDED, deepType: DELTA_TYPE.ADDED },
+    { delta: DeltaX, path: ['summary'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['summary', '2'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['surface'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.DELETED },
+    { delta: DeltaX, path: ['surface', '3'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['demographics'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['demographics', 'population'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    {
+      delta: DeltaX,
+      path: ['demographics', 'population', '3'],
+      type: DELTA_TYPE.MODIFIED,
+      deepType: DELTA_TYPE.UNCHANGED,
+    },
+    { delta: DeltaX, path: ['languages'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['languages', '1'], type: DELTA_TYPE.UNCHANGED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['languages', '3'], type: DELTA_TYPE.UNCHANGED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['languages', '2'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['languages', '2', '0'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['languages', '2', '1'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['languages', '2', '3'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['countries'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '0'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '0', 'capital'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '4'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '8'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '9'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.ADDED },
+    { delta: DeltaX, path: ['countries', '9', 'name'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.ADDED },
+    { delta: DeltaX, path: ['countries', '9', 'unasur'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.ADDED },
+    { delta: DeltaX, path: ['countries', '10'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '10', 'name'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.MODIFIED },
+    { delta: DeltaX, path: ['countries', '10', 'unasur'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.UNCHANGED },
+    {
+      delta: DeltaX,
+      path: ['countries', '10', 'population'],
+      type: DELTA_TYPE.MODIFIED,
+      deepType: DELTA_TYPE.ADDED,
+    },
+    { delta: DeltaX, path: ['countries', '10', 'xxx'], type: DELTA_TYPE.MODIFIED, deepType: DELTA_TYPE.UNCHANGED },
+    { delta: DeltaX, path: ['countries', '11'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.DELETED },
+    { delta: DeltaX, path: ['countries', '11', 'name'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.DELETED },
+    { delta: DeltaX, path: ['countries', '11', 'unasur'], type: DELTA_TYPE.DELETED, deepType: DELTA_TYPE.DELETED },
+  ];
+
+  for (const { delta, path, type, deepType } of cases) {
+    expect(getDeltaType(delta, path)).toBe(type);
+    expect(getDeltaType(delta, path, { deep: true })).toBe(deepType);
+
+    expect(getDeltaType(delta, path.join('.'))).toBe(type);
+    expect(getDeltaType(delta, path.join('.'), { deep: true })).toBe(deepType);
+  }
 });

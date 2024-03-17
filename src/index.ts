@@ -1,3 +1,4 @@
 export * from './types';
-export * from './schema';
-export * from './delta';
+export * from './getSchemaByPath';
+export * from './getDeltaByPath';
+export * from './getDeltaType';

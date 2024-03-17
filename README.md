@@ -2,6 +2,7 @@
 
 * [getSchemaByPath](#getSchemaByPath)
 * [getDeltaByPath](#getDeltaByPath)
+* [getDeltaType](#getDeltaType)
 
 ## getSchemaByPath
 
@@ -17,7 +18,7 @@ The `getSchemaByPath` function is designed to navigate through a JSON Schema and
 ### Function Signature
 
 ```ts
-function getSchemaByPath(schema: JsonSchema, path: string | string[]): JsonSchema | undefined;
+const getSchemaByPath: (schema: JsonSchema, path: string | string[]) => JsonSchema | undefined
 ```
 
 ### Parameters
@@ -78,7 +79,7 @@ The `getSchemaByPath` function is a powerful tool for dynamically accessing nest
 
 ## getDeltaByPath
 
-The `getDeltaByPath` method is part of a [jsondiffpatch](https://github.com/benjamine/jsondiffpatch/tree/master) utility designed to extract a specific delta (change set) from a larger delta object representing differences between two JSON objects. This method is useful for retrieving precise change information at a given path within the JSON structure.
+The `getDeltaByPath` method is a tool of [jsondiffpatch](https://github.com/benjamine/jsondiffpatch/tree/master) utility designed to extract a specific delta (change set) from a larger delta object representing differences between two JSON objects. This method is useful for retrieving precise change information at a given path within the JSON structure.
 
 ### Delta Types
 
@@ -93,7 +94,7 @@ The `getDeltaByPath` method is part of a [jsondiffpatch](https://github.com/benj
 ### Function Signature
 
 ```ts
-function getDeltaByPath(delta: Delta, path: string | string[]): Delta;
+const getDeltaByPath: (delta: Delta, path: string | string[]) => Delta
 ```
 
 ### Parameters
@@ -106,6 +107,7 @@ function getDeltaByPath(delta: Delta, path: string | string[]): Delta;
 Returns a Delta object representing the change at the specified path. If no change exists at that path or the path is invalid, the function returns undefined.
 
 ### Usage
+
 To use the `getDeltaByPath` function, you need to pass the complete delta object and the path to the specific change you want to retrieve. The path can be a dot-separated string (e.g., `"user.name"`) or an array of strings representing the keys and indexes in the path (e.g., `["user", "name"]`).
 
 ### Example
@@ -146,3 +148,56 @@ console.log(getDeltaByPath(delta, 'unasur'));       // undefined
 ### Conclusion
 
 The `getDeltaByPath` method is a powerful tool for navigating complex delta objects and extracting specific changes, making it easier to understand and handle the differences between JSON objects in a fine-grained manner.
+
+## getDeltaType
+
+The `getDeltaType` method is a tool of [jsondiffpatch](https://github.com/benjamine/jsondiffpatch/tree/master) that generates a delta object representing the difference between two JSON values. This method analyzes a delta object to determine the type of change it represents. The delta types include added, deleted, modified, unchanged, and unknown.
+
+### Function Signature
+
+```ts
+const getDeltaType: (delta: Delta, path?: string | string[], options?: GetDeltaTypeOptions) => DELTA_TYPE
+```
+
+### Parameters
+
+* `delta`: The delta object to inspect.
+* `path`: An optional path (string or array of strings) to a specific part of the delta object.
+* `options`: An optional object with the following properties:
+  * `deep`: A boolean indicating whether to inspect deeply into nested objects and arrays.
+
+### Return Value
+
+The function returns a value from the `DELTA_TYPE` enum, indicating the type of change detected:
+
+```ts
+export enum DELTA_TYPE {
+  ADDED = 'added',
+  DELETED = 'deleted',
+  MODIFIED = 'modified',
+  UNCHANGED = 'unchanged',
+  UNKNOWN = 'unknown',
+}
+```
+
+### Usage
+
+```ts
+import { type DELTA_TYPE, type Delta, getDeltaType } from 'jsoncargo';
+
+const delta: Delta = // your delta object here;
+const path: string | string[] = // optional path to inspect within the delta;
+
+const options = {
+  deep: true // optional, set to true to inspect deeply in the object structure
+};
+
+const type = getDeltaType(delta, path, options);
+console.log(type); // outputs the DELTA_TYPE of the change at the specified path
+```
+
+### Notes
+
+The method handles different structures of delta objects, including arrays and objects, and interprets them according to the specified path and options.
+
+The `deep` option allows for detailed inspection of nested structures within the delta object, providing flexibility in how changes are detected and classified.
