@@ -1,7 +1,6 @@
 {
   "name": "jsoncargo",
-  "version": "0.0.1-alpha.10",
-  "type": "module",
+  "version": "0.0.1-alpha.11",
   "module": "src/index.ts",
   "types": "./dist/types",
   "esnext": "/dist/index.js",
