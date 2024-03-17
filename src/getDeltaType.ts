@@ -9,7 +9,11 @@ export type GetDeltaTypeOptions = {
   deep?: boolean;
 };
 
-export const getDeltaType = (delta: Delta, path?: string | string[], options: GetDeltaTypeOptions = {}): DELTA_TYPE => {
+export const getDeltaType = (
+  delta: Delta,
+  path: string | string[] = [],
+  options: GetDeltaTypeOptions = {},
+): DELTA_TYPE => {
   if (typeof delta !== 'object' || delta === null) {
     return DELTA_TYPE.UNCHANGED;
   }
@@ -64,25 +68,6 @@ export const getDeltaType = (delta: Delta, path?: string | string[], options: Ge
       return DELTA_TYPE.ADDED;
     }
     if (delta.length === 2) {
-      // ModifiedDelta
-      // const left = paths.length > 0 ? get(delta[0], paths) : delta[0];
-      // const right = paths.length > 0 ? get(delta[1], paths) : delta[1];
-      // const hasLeft = typeof left !== 'undefined';
-      // const hasRight = typeof right !== 'undefined';
-
-      // if (isEqual(left, right)) {
-      //   return DELTA_TYPE.UNCHANGED;
-      // }
-
-      // if (hasLeft && hasRight) {
-      //   return DELTA_TYPE.MODIFIED;
-      // }
-      // if (hasLeft) {
-      //   return DELTA_TYPE.DELETED;
-      // }
-      // if (hasRight) {
-      //   return DELTA_TYPE.ADDED;
-      // }
       return DELTA_TYPE.MODIFIED;
     }
     if (delta.length === 3 && delta[1] === 0 && delta[2] === 0) {

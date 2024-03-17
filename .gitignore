@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 dist/
+
+mock/y.delta.json
+tests/deltay.test.ts
