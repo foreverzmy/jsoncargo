@@ -1,8 +1,8 @@
-type Json = string | number | boolean | null | Array<Json> | { [key: string]: Json };
+export type Json = string | number | boolean | null | Array<Json> | { [key: string]: Json };
 export type JsonType = 'object' | 'array' | 'string' | 'number' | 'boolean' | 'null';
 export type JsonSchemaType = JsonType | 'integer';
 
-export type JsonSchema = {
+export interface JsonSchema {
   $schema?: string;
   $id?: string;
   $anchor?: string;
@@ -14,25 +14,10 @@ export type JsonSchema = {
   $comment?: string;
   $defs?: Record<string, JsonSchema>;
 
+  /** A Vocabulary for Structural Validation */
   type?: JsonSchemaType | JsonSchemaType[];
-  additionalItems?: JsonSchema;
-  unevaluatedItems?: JsonSchema;
-  prefixItems?: JsonSchema[];
-  items?: JsonSchema;
-  contains?: JsonSchema;
-  additionalProperties?: JsonSchema;
-  unevaluatedProperties?: JsonSchema;
-  properties?: Record<string, JsonSchema>;
-  patternProperties?: Record<string, JsonSchema>;
-  dependentSchemas?: Record<string, JsonSchema>;
-  propertyNames?: JsonSchema;
-  if?: JsonSchema;
-  then?: JsonSchema;
-  else?: JsonSchema;
-  allOf?: JsonSchema[];
-  anyOf?: JsonSchema[];
-  oneOf?: JsonSchema[];
-  not?: JsonSchema;
+  enum?: Json[];
+  const?: Json;
   multipleOf?: number;
   maximum?: number;
   exclusiveMaximum?: number;
@@ -42,6 +27,7 @@ export type JsonSchema = {
   minLength?: number;
   pattern?: string;
   maxItems?: number;
+  additionalItems?: JsonSchema;
   minItems?: number;
   uniqueItems?: boolean;
   maxContains?: number;
@@ -50,15 +36,8 @@ export type JsonSchema = {
   minProperties?: number;
   required?: string[];
   dependentRequired?: Record<string, string[]>;
-  const?: Json;
-  enum?: Json[];
-  title?: string;
-  description?: string;
-  default?: Json;
-  deprecated?: boolean;
-  readOnly?: boolean;
-  writeOnly?: boolean;
-  examples?: Json[];
+
+  /** Vocabularies for Semantic Content With "format" */
   format?:
     | 'date-time'
     | 'date'
@@ -79,7 +58,37 @@ export type JsonSchema = {
     | 'json-pointer'
     | 'relative-json-pointer'
     | 'regex';
-  contentMediaType?: string;
+
+  /** A Vocabulary for the Contents of String-Encoded Data */
   contentEncoding?: string;
+  contentMediaType?: string;
   contentSchema?: JsonSchema;
-};
+
+  /** A Vocabulary for Basic Meta-Data Annotations */
+  title?: string;
+  default?: Json;
+  description?: string;
+  deprecated?: boolean;
+  readOnly?: boolean;
+  writeOnly?: boolean;
+  examples?: Json[];
+
+  /** A Vocabulary for Applying Subschemas */
+  unevaluatedItems?: JsonSchema;
+  prefixItems?: JsonSchema[];
+  items?: JsonSchema;
+  contains?: JsonSchema;
+  additionalProperties?: JsonSchema;
+  unevaluatedProperties?: JsonSchema;
+  properties?: Record<string, JsonSchema>;
+  patternProperties?: Record<string, JsonSchema>;
+  dependentSchemas?: Record<string, JsonSchema>;
+  propertyNames?: JsonSchema;
+  if?: JsonSchema;
+  then?: JsonSchema;
+  else?: JsonSchema;
+  allOf?: JsonSchema[];
+  anyOf?: JsonSchema[];
+  oneOf?: JsonSchema[];
+  not?: JsonSchema;
+}
