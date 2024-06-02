@@ -1,8 +1,23 @@
 import { test, expect } from 'bun:test';
 
-import { type Json, jsonMergePatch, isJsonObject, cloneJsonDeep } from '../src';
+import {
+  type Json,
+  type JsonMergePatchOptions,
+  jsonMergePatch,
+  isJsonObject,
+  cloneJsonDeep,
+  type JsonArray,
+} from '../src';
 
-const cases: Array<{ original: Json; patch: Json; result: Json; generatePatch?: Json }> = [
+interface TestCase {
+  original: Json;
+  patch: Json;
+  result: Json;
+  generatePatch?: Json;
+  options?: JsonMergePatchOptions;
+}
+
+const testCases: Array<TestCase> = [
   {
     original: { a: 'b' },
     patch: { a: 'c' },
@@ -43,6 +58,7 @@ const cases: Array<{ original: Json; patch: Json; result: Json; generatePatch?: 
     original: { a: [{ b: 'c' }] },
     patch: { a: [1] },
     result: { a: [1] },
+    options: { arrays: { deepPatch: true } },
   },
   {
     original: ['a', 'b'],
@@ -81,18 +97,44 @@ const cases: Array<{ original: Json; patch: Json; result: Json; generatePatch?: 
     result: { a: { bb: {} } },
     generatePatch: { a: { bb: {} } },
   },
+  {
+    original: ['a', 'b'],
+    patch: ['c', 'd', 'e'],
+    result: ['c', 'd', 'e'],
+    options: { arrays: { deepPatch: true } },
+  },
+  {
+    original: ['a', 'b'],
+    patch: ['a', 'b', 'e'],
+    result: ['a', 'b', 'e'],
+    options: { arrays: { deepPatch: true } },
+    generatePatch: [undefined, undefined, 'e'] as JsonArray,
+  },
+  {
+    original: ['a', 'b', 'e'],
+    patch: [undefined, undefined, null] as JsonArray,
+    result: ['a', 'b'],
+    options: { arrays: { deepPatch: true } },
+  },
+  {
+    original: ['a', 'b', 'e'],
+    patch: [undefined, null, undefined, 'f'] as JsonArray,
+    result: ['a', 'e', 'f'],
+    options: { arrays: { deepPatch: true } },
+    generatePatch: [undefined, 'e', 'f'] as JsonArray,
+  },
 ];
 
 test('jsonMergePatch merge', () => {
-  for (const { original, patch, result } of cases) {
-    expect(jsonMergePatch.merge(original, patch)).toEqual(result);
+  for (const { original, patch, result, options } of testCases) {
+    expect(jsonMergePatch.merge(original, patch, options)).toEqual(result);
   }
 });
 
 test('jsonMergePatch apply', () => {
-  for (const { original, patch, result } of cases) {
+  for (const { original, patch, result, options } of testCases) {
     const cloneOriginal = cloneJsonDeep(original);
-    const target = jsonMergePatch.apply(cloneOriginal, patch);
+    const target = jsonMergePatch.apply(cloneOriginal, patch, options);
     if (isJsonObject(cloneOriginal) && isJsonObject(target)) {
       expect(cloneOriginal as Json).toBe(target);
     }
@@ -101,7 +143,7 @@ test('jsonMergePatch apply', () => {
 });
 
 test('jsonMergePatch generate', () => {
-  for (const { original, patch, result, generatePatch } of cases) {
-    expect(jsonMergePatch.generate(original, result)).toEqual(generatePatch ?? patch);
+  for (const { original, patch, result, generatePatch, options } of testCases) {
+    expect(jsonMergePatch.generate(original, result, options)).toEqual(generatePatch ?? patch);
   }
 });

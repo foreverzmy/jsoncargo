@@ -1,4 +1,6 @@
-export type Json = string | number | boolean | null | Array<Json> | { [key: string]: Json };
+export type Json = string | number | boolean | null | JsonArray | JsonObject;
+export type JsonObject = { [key: string]: Json };
+export type JsonArray = Array<Json>;
 export type JsonType = 'object' | 'array' | 'string' | 'number' | 'boolean' | 'null';
 export type JsonSchemaType = JsonType | 'integer';
 
