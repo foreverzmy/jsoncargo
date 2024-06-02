@@ -133,3 +133,5 @@ dist/
 
 mock/y.delta.json
 tests/deltay.test.ts
+
+.DS_Store
