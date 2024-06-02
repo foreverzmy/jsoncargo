@@ -1,5 +1,5 @@
-import toPath from 'lodash/toPath';
 import get from 'lodash/get';
+import toPath from 'lodash/toPath';
 
 import { DELTA_TYPE, type Delta, type ObjectDelta } from './types';
 import { isNumericString } from './utils';
