@@ -17,7 +17,7 @@
     "dist/",
     "src/"
   ],
-  "keywords": ["json", "diff", "merge", "schema", "jsonschema","utils"],
+  "keywords": ["json", "diff", "merge", "schema", "jsonschema", "utils"],
   "license": "MIT",
   "homepage": "https://github.com/foreverzmy/jsoncargo",
   "repository": {
@@ -29,10 +29,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
-    "@types/lodash": "^4.17.0"
+    "@types/lodash": "^4.17.5",
+    "gh-pages": "^6.1.1"
   },
   "peerDependencies": {
-    "lodash": "^4",
-    "typescript": "^5"
+    "lodash": "^4.17.21",
+    "typescript": "^5.4.2"
   }
 }

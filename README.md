@@ -1,5 +1,17 @@
 # jsoncargo
 
+[Docs](http://jsoncargo.foreverz.cn)
+
+# Install
+
+```npm
+npm install jsoncargo
+```
+
+## Introduction
+
+The `jsoncargo` package provides a versatile set of tools designed to interact with and manipulate JSON objects. It aims to simplify various operations involving JSON data, making it easier for developers to work with complex JSON structures.
+
 * [getSchemaByPath](#getSchemaByPath)
 * [getDeltaByPath](#getDeltaByPath)
 * [getDeltaType](#getDeltaType)
