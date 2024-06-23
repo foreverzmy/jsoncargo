@@ -4,7 +4,7 @@
 * [getDeltaByPath](#getDeltaByPath)
 * [getDeltaType](#getDeltaType)
 * [jsonMergePatch](#jsonMergePatch)
-* [ObservableObject](#jsonMergePatch)
+* [ObservableObject](#ObservableObject)
 
 ## getSchemaByPath
 
