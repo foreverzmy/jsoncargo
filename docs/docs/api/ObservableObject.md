@@ -119,6 +119,13 @@ console.log(observable.get('user.age')); // Returns 26
 
 > Note: If the value being set is equal to the existing value, watchers will not be triggered.
 
+### Delete Path and Value
+
+```ts
+observable.unset('user.age');
+console.log(observable.get('user.age')); // Returns undefined
+```
+
 ### Watching for Changes
 
 ```ts

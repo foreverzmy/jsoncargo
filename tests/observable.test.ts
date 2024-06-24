@@ -115,9 +115,23 @@ test('ObservableObject watch', () => {
     },
   });
 
-  expect(fn1).toHaveBeenCalledTimes(Object.keys(set).length + 1);
+  oobj.unset('d.c');
+
+  expect(oobj.value).toEqual({
+    a: { b: 234, c: 'hello world' },
+    c: [
+      { x: 2, y: 1 },
+      { x: 3, y: 2 },
+      { z: 3, x: 3 },
+    ],
+    d: {
+      a: 1,
+      b: 2,
+    },
+  });
+  expect(fn1).toHaveBeenCalledTimes(Object.keys(set).length + 2);
   expect(fn2).toHaveBeenCalledTimes(3);
   expect(fn3).toHaveBeenCalledTimes(2);
   expect(fn4).toHaveBeenCalledTimes(2);
-  expect(fn5).toHaveBeenCalledTimes(4);
+  expect(fn5).toHaveBeenCalledTimes(5);
 });

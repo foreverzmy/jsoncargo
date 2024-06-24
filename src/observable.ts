@@ -6,6 +6,7 @@ import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
 import set from 'lodash/set';
 import toPath from 'lodash/toPath';
+import unset from 'lodash/unset';
 
 export type PropertyPath = LodashPropertyPath;
 
@@ -50,6 +51,15 @@ export class ObservableObject<T extends object> {
     set(this.#target, path, value);
     this.#notifyWatchers(pathArr, value, oldValue);
     return this.get<V>(pathArr);
+  };
+
+  unset = (path: PropertyPath) => {
+    const pathArr = toPath(path);
+    const oldValue = get(this.#target, pathArr);
+    if (unset(this.#target, pathArr)) {
+      this.#updated = true;
+      this.#notifyWatchers(pathArr, undefined, oldValue);
+    }
   };
 
   get(): T;
