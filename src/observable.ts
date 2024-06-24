@@ -53,12 +53,13 @@ export class ObservableObject<T extends object> {
     return this.get<V>(pathArr);
   };
 
-  unset = (path: PropertyPath) => {
+  unset = <V = any>(path: PropertyPath) => {
     const pathArr = toPath(path);
     const oldValue = get(this.#target, pathArr);
     if (unset(this.#target, pathArr)) {
       this.#updated = true;
       this.#notifyWatchers(pathArr, undefined, oldValue);
+      return oldValue as V;
     }
   };
 

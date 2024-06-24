@@ -63,6 +63,18 @@ get<V>(path: PropertyPath): V;
 
 Returns the **deep clone value** at the specified path or a **deep clone** of the entire object if no path is provided.
 
+#### `unset`
+
+Delete the value at a specific path.
+
+```ts
+unset<V = any>(path: PropertyPath): V | undefined;
+```
+
+* `path`: The path to delete.
+
+Returns the value at the specified path to delete, if the path not exists, it will be `undefined`.
+
 #### `watch`
 
 Watches for changes at a specific path and executes a callback when changes occur.
