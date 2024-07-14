@@ -135,3 +135,37 @@ test('ObservableObject watch', () => {
   expect(fn4).toHaveBeenCalledTimes(2);
   expect(fn5).toHaveBeenCalledTimes(5);
 });
+
+test('ObservableObject customizer set', () => {
+  const obj = {
+    a: { b: 123 },
+  };
+
+  const oobj = new ObservableObject<any>(obj);
+
+  oobj.set('a.1', 2);
+
+  oobj.set('b.0', 'item0');
+  oobj.set('b.1', 'item1');
+
+  const customizer = (nsValue: any, key: string, nsObject: any) => {
+    if (typeof nsValue !== 'undefined') {
+      return nsValue;
+    }
+    if (key === 'c') {
+      return {};
+    }
+  };
+
+  oobj.set('c.0', 'item0', customizer);
+  oobj.set('c.1', 'item1', customizer);
+
+  expect(oobj.value).toEqual({
+    a: { b: 123, 1: 2 },
+    b: ['item0', 'item1'],
+    c: {
+      '0': 'item0',
+      '1': 'item1',
+    },
+  });
+});

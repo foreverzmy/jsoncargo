@@ -15,7 +15,7 @@ type PropertyName = string | number | symbol;
 
 `PropertyName` refers to the various ways you can specify a property name when using methods that deal with object properties.
 
-It uses lodash's API internally, so its behavior is consistent with [lodash.get](https://lodash.com/docs/4.17.15#get) and [lodash.set](https://lodash.com/docs/4.17.15#set) and [lodash.toPath](https://lodash.com/docs/4.17.15#toPath) methods when operating the target objects.
+It uses lodash's API internally, so its behavior is consistent with [lodash.get](https://lodash.com/docs/4.17.15#get) and [lodash.setWith](https://lodash.com/docs/4.17.15#setWith) and [lodash.toPath](https://lodash.com/docs/4.17.15#toPath) methods when operating the target objects.
 
 
 ## Class Definition
@@ -42,11 +42,12 @@ Sets a value at a specific path within the object and notifies watchers if the v
 
 ```ts
 
-set<V = any>(path: PropertyPath, value: V): V;
+set<V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V;
 ```
 
 * `path`: The path where the value should be set (can be a string or an array of strings).
 * `value`: The new value to set at the specified path.
+* `customizer` (optional): The function to customize assigned values. 
 
 Returns the new value at the specified path.
 

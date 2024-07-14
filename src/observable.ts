@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
 import set from 'lodash/set';
+import setWith from 'lodash/setWith';
 import toPath from 'lodash/toPath';
 import unset from 'lodash/unset';
 
@@ -41,14 +42,14 @@ export class ObservableObject<T extends object> {
     return this.#clonedTarget;
   }
 
-  set = <V = any>(path: PropertyPath, value: V): V => {
+  set = <V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V => {
     const pathArr = toPath(path);
     const oldValue = get(this.#target, pathArr);
     if (isEqual(value, oldValue)) {
       return value;
     }
     this.#updated = true;
-    set(this.#target, path, value);
+    setWith(this.#target, path, value, customizer);
     this.#notifyWatchers(pathArr, value, oldValue);
     return this.get<V>(pathArr);
   };
