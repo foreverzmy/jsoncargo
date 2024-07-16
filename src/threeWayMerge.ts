@@ -1,6 +1,6 @@
-import type { Json, ThreeWayMergeResult } from './types';
-import { generate, merge } from './jsonMergePatch';
 import { diffConflicts } from './diffConflict';
+import { generate, merge } from './jsonMergePatch';
+import type { Json, ThreeWayMergeResult } from './types';
 
 const patchOptions = { arrays: { deepPatch: true } };
 

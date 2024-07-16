@@ -1,6 +1,6 @@
-import { test, expect, describe } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 
-import { type Json, threeWayMerge } from '../src';
+import { type Json, type PathType, threeWayMerge } from '../src';
 
 interface TestCase {
   description: string;
@@ -9,7 +9,7 @@ interface TestCase {
   local: Json;
   remote: Json;
   expected: Json;
-  conflicts?: string[];
+  conflicts?: PathType[][];
 }
 
 const testCases: Array<TestCase> = [
@@ -44,7 +44,7 @@ const testCases: Array<TestCase> = [
     local: { a: 1, b: 3 },
     remote: { a: 1, b: 4 },
     expected: null,
-    conflicts: ['b'],
+    conflicts: [['b']],
   },
   {
     description: 'Local adds new key',
@@ -109,7 +109,7 @@ const testCases: Array<TestCase> = [
     local: { a: [1, 2, 3, 7], b: [5, 6] },
     remote: { a: [1, 3, 4], b: [4, 5, 6, 7] },
     expected: null,
-    conflicts: ['a', 'b'],
+    conflicts: [['a'], ['b']],
   },
   {
     description: 'Complex nested structures with conflicts',
@@ -118,7 +118,7 @@ const testCases: Array<TestCase> = [
     local: { a: { x: 2, y: { z: 2 } }, b: [1, 2, 3] },
     remote: { a: { x: 1, y: { z: 3 } }, b: [2, 3] },
     expected: null,
-    conflicts: ['b'],
+    conflicts: [['b']],
   },
   {
     description: 'Deeply nested objects with different changes',
@@ -129,12 +129,37 @@ const testCases: Array<TestCase> = [
     expected: { a: { b: { c: { d: 2, e: 3, f: 4 } } } },
   },
   {
+    description: 'Deeply nested objects with conflicts',
+    conflict: true,
+    base: { a: { b: { c: { d: 1 } } } },
+    local: { a: { b: { c: { d: 2, e: 3 } } } },
+    remote: { a: { b: { c: { d: 3, e: 4 } } } },
+    expected: null,
+    conflicts: [
+      ['a', 'b', 'c', 'd'],
+      ['a', 'b', 'c', 'e'],
+    ],
+  },
+  {
     description: 'Arrays and objects combined',
     conflict: false,
     base: { a: [{ x: 1 }, { y: 2 }] },
     local: { a: [{ x: 1 }, { y: 3 }] },
     remote: { a: [{ x: 2 }, { y: 2 }] },
     expected: { a: [{ x: 2 }, { y: 3 }] },
+  },
+  {
+    description: 'Arrays and objects combined with conflicts',
+    conflict: true,
+    base: { a: [{ x: 1 }, { y: 2 }] },
+    local: { a: [{ x: 2 }, { y: 3 }, 'c'] },
+    remote: { a: [{ x: 3 }, { y: 4 }, 'd'] },
+    expected: null,
+    conflicts: [
+      ['a', 0, 'x'],
+      ['a', 1, 'y'],
+      ['a', 2],
+    ],
   },
 ];
 

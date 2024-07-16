@@ -1,1 +1,1 @@
-["index", "getSchemaByPath", "getDeltaByPath", "getDeltaType", "jsonMergePatch", "ObservableObject"]
+["index", "getSchemaByPath", "getDeltaByPath", "getDeltaType", "jsonMergePatch",  "threeWayMerge", "ObservableObject"]

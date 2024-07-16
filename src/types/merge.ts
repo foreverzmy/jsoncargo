@@ -3,7 +3,7 @@ import type { Json } from './schema';
 export interface ThreeWayMergeResult {
   conflict: boolean;
   result: Json;
-  conflicts: string[];
+  conflicts: PathType[][];
 }
 
 export interface JsonMergePatchOptions {
@@ -11,3 +11,5 @@ export interface JsonMergePatchOptions {
     deepPatch: boolean;
   };
 }
+
+export type PathType = string | number;

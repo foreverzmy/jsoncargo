@@ -104,6 +104,8 @@ Returns a function to unsubscribe from the watch.
 ### Creating an ObservableObject
 
 ```ts
+import { ObservableObject } from 'jsoncargo';
+
 const obj = {
   user: {
     name: 'Alice',
