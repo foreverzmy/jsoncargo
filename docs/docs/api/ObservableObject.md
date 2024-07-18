@@ -45,7 +45,7 @@ set(values: T): T;
 set<V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V;
 ```
 
-* `value`: Set the full object to replace `target` if just only one parameters.
+* `values`: Set the full object to replace `target` if just only one parameters.
 * `path`: The path where the value should be set (can be a string or an array of strings).
 * `value`: The new value to set at the specified path.
 * `customizer` (optional): The function to customize assigned values. 
