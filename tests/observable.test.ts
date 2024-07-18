@@ -169,3 +169,49 @@ test('ObservableObject customizer set', () => {
     },
   });
 });
+
+test('ObservableObject set values', () => {
+  const obj = {
+    a: { b: 123 },
+    c: [{ x: 1 }, { y: 2 }, { z: 3 }],
+  };
+
+  const oobj = new ObservableObject(obj);
+
+  const fn1 = mock(() => {});
+  const fn2 = mock(() => {});
+  const fn3 = mock(() => {});
+  const fn4 = mock(() => {});
+  oobj.watch('*', fn1);
+  oobj.watch('a', fn2);
+  oobj.watch('a.b', fn3);
+  oobj.watch('c', fn4);
+  oobj.watch('c.0.x', fn4);
+  oobj.watch('c.1.y', fn4);
+  oobj.watch('c.2.z', fn4);
+
+  oobj.set({
+    ...obj,
+    a: { b: 234 },
+  });
+
+  oobj.set({
+    ...obj,
+    a: { b: 234 },
+  });
+
+  oobj.set({
+    ...obj,
+    a: { b: 345 },
+  });
+
+  expect(fn1).toHaveBeenCalledTimes(2);
+  expect(fn2).toHaveBeenCalledTimes(2);
+  expect(fn3).toHaveBeenCalledTimes(2);
+  expect(fn4).toHaveBeenCalledTimes(0);
+
+  expect(oobj.value).toEqual({
+    a: { b: 345 },
+    c: [{ x: 1 }, { y: 2 }, { z: 3 }],
+  });
+});

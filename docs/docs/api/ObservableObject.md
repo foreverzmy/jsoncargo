@@ -41,10 +41,11 @@ constructor(target: T)
 Sets a value at a specific path within the object and notifies watchers if the value changes.
 
 ```ts
-
+set(values: T): T;
 set<V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V;
 ```
 
+* `value`: Set the full object to replace `target` if just only one parameters.
 * `path`: The path where the value should be set (can be a string or an array of strings).
 * `value`: The new value to set at the specified path.
 * `customizer` (optional): The function to customize assigned values. 
@@ -130,6 +131,9 @@ console.log(observable.get('user.name')); // Returns 'Alice'
 ```ts
 observable.set('user.age', 26);
 console.log(observable.get('user.age')); // Returns 26
+
+observable.set({ ...obj, items: ['item'] });
+console.log(observable.get('items.0')); // Returns 'item'
 ```
 
 > Note: If the value being set is equal to the existing value, watchers will not be triggered.

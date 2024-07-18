@@ -4,7 +4,6 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
-import set from 'lodash/set';
 import setWith from 'lodash/setWith';
 import toPath from 'lodash/toPath';
 import unset from 'lodash/unset';
@@ -23,7 +22,7 @@ export type OffWatch = () => void;
 const isParentPath = (parent: string[], path: string[]) =>
   parent.length < path.length && isEqual(parent, path.slice(0, parent.length));
 
-export class ObservableObject<T extends object> {
+export class ObservableObject<T extends { [key: string]: any }> {
   #target: T;
   #watchers = new Map<string[], Set<WatchCallback>>();
   #updated = false;
@@ -42,7 +41,28 @@ export class ObservableObject<T extends object> {
     return this.#clonedTarget;
   }
 
-  set = <V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V => {
+  set(values: T): T;
+  set<V = any>(path: PropertyPath, value: V, customizer?: (nsValue: any, key: string, nsObject: T) => any): V;
+  set<V = any>(...args: any[]) {
+    if (args.length === 1) {
+      const values = args[0];
+      if (isEqual(this.value, values)) {
+        return this.get();
+      }
+
+      const oldValue = this.value;
+      this.#target = cloneDeep(values);
+      this.#updated = true;
+      new Set([...Object.keys(values), ...Object.keys(oldValue)]).forEach((key) => {
+        if (!isEqual(values[key], oldValue[key])) {
+          this.#notifyWatchers([key], values[key], oldValue[key]);
+        }
+      });
+      return this.get();
+    }
+
+    const [path, value, customizer] = args;
+
     const pathArr = toPath(path);
     const oldValue = get(this.#target, pathArr);
     if (isEqual(value, oldValue)) {
@@ -52,7 +72,7 @@ export class ObservableObject<T extends object> {
     setWith(this.#target, path, value, customizer);
     this.#notifyWatchers(pathArr, value, oldValue);
     return this.get<V>(pathArr);
-  };
+  }
 
   unset = <V = any>(path: PropertyPath) => {
     const pathArr = toPath(path);
